@@ -29,7 +29,7 @@ impl Canvas {
     }
 
     pub fn write(&mut self, x: usize, y: usize, color: Color) {
-        *self.at_mut(x, y) = color;
+        *self.get_mut_pixel(x, y) = color;
     }
 
     pub fn get_mut_pixel(&mut self, x: usize, y: usize) -> &mut Color {
@@ -48,6 +48,23 @@ impl Canvas {
         } else {
             panic!("Error: can't get pixel at x:{} y:{}", x, y);
         }
+    }
+
+    pub fn to_ppm(&self) -> String {
+        let mut ppm = format!("P3\n{} {}\n255\n", self.width, self.height);
+        for y in 0..self.height {
+            for x in 0..self.width {
+                let pixel = &self.at(x, y);
+
+                let r = (pixel.red().clamp(0.0, 1.0) * 255.0) as u32;
+                let g = (pixel.green().clamp(0.0, 1.0) * 255.0) as u32;
+                let b = (pixel.blue().clamp(0.0, 1.0) * 255.0) as u32;
+
+                ppm.push_str(&format!("{} {} {} ", r, g, b));
+            }
+            ppm.push('\n');
+        }
+        ppm
     }
 
     pub fn save_to_file(&self, filename: &str) -> io::Result<()> {

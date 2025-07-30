@@ -1,4 +1,4 @@
-use std::convert::Into;
+// use std::convert::Into;
 use std::ops::{Add, AddAssign, Mul, MulAssign, Sub, SubAssign};
 
 #[derive(Debug, Clone, Copy)]
@@ -71,5 +71,27 @@ impl MulAssign<f32> for Color {
         self.r *= rhs;
         self.g *= rhs;
         self.b *= rhs;
+    }
+}
+
+// hadamard product
+impl Mul for Color {
+    type Output = Self;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        Color::new(
+            self.r * rhs.r,
+            self.g * rhs.g,
+            self.b * rhs.b
+        )
+    }
+}
+
+// hadamard product
+impl MulAssign for Color {
+    fn mul_assign(&mut self, rhs: Self) {
+        self.r *= rhs.r;
+        self.g *= rhs.g;
+        self.b *= rhs.b;
     }
 }
