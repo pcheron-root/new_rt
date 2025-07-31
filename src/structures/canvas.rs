@@ -2,7 +2,9 @@ use std::fs::File;
 use std::io::{self, Write};
 
 use crate::Color;
+use crate::NewCanvas;
 
+#[derive(Debug)]
 pub struct Canvas {
     pub width: usize,
     pub height: usize,
@@ -10,15 +12,13 @@ pub struct Canvas {
 }
 
 impl Canvas {
-    pub fn new(width: usize, height: usize) -> Self {
-        if width == 0 || height == 0 {
-            panic!("Cannot create a canvas with zero or negative size");
-        }
 
-        Self {
-            width,
-            height,
-            pixels: vec![Color::new(0.0, 0.0, 0.0); width * height],
+    pub fn new(new_canvas: NewCanvas) -> Self {
+        let pixel_count = new_canvas.width * new_canvas.height;
+        Canvas {
+            width: new_canvas.width,
+            height: new_canvas.height,
+            pixels: vec![Color::BLACK; pixel_count],
         }
     }
 
