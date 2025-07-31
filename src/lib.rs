@@ -12,6 +12,7 @@ pub use structures::matrix::Matrix;
 pub use structures::ray::Ray;
 pub use structures::point::Point;
 pub use structures::object::Object;
+pub use structures::object::Transform;
 pub use structures::intersection::Intersection;
 pub use structures::intersection::Intersect;
 pub use structures::intersection::LocalIntersection;
