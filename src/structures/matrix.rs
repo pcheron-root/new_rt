@@ -183,6 +183,7 @@ impl Matrix {
         r
     }
 
+    // move the object in space
     pub fn translation(vector: Vector) -> Matrix {
         let mut t = Matrix::identity();
 
@@ -193,6 +194,7 @@ impl Matrix {
         t
     }
 
+    // change object size
     pub fn scaling(vector: Vector) -> Matrix {
         let mut s = Matrix::new();
 
