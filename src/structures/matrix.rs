@@ -2,7 +2,9 @@ use crate::EPSILON;
 use crate::{Point, Ray, Vector};
 use std::ops::{Index, IndexMut, Mul, MulAssign};
 
-#[derive(Debug, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Matrix {
     pub data: [[f32; 4]; 4],
 }

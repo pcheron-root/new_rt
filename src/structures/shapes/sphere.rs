@@ -4,7 +4,9 @@ use crate::Point;
 use crate::Ray;
 use crate::Vector;
 
-#[derive(Debug, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Sphere {
     pub radius: f32,
 }

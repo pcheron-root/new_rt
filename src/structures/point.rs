@@ -4,7 +4,9 @@ use crate::Vector;
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Neg, Sub, SubAssign};
 
-#[derive(Debug, Clone, Copy)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct Point {
     pub x: f32,
     pub y: f32,

@@ -2,10 +2,12 @@
 use std::fs;
 
 use serde::{Deserialize, Serialize};
+use crate::World;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InfoMap {
     pub canvas: NewCanvas,
+    pub world: World,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

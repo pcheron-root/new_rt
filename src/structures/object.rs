@@ -1,7 +1,9 @@
 use crate::EPSILON;
 use crate::{Intersection, Material, Matrix, Point, Ray, Shape, Vector};
 
-#[derive(Debug, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Object {
     pub material: Material,
     pub position: Point,

@@ -1,7 +1,9 @@
 
 use crate::{Sphere, Ray, LocalIntersection, Intersect};
 
-#[derive(Debug, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub enum Shape {
     Sphere(Sphere),
 }

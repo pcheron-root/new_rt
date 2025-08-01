@@ -1,7 +1,9 @@
 use crate::{Color};//, Pattern};
 use std::default::Default;
 
-#[derive(Debug, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Material {
     pub color: Color,
     // pub pattern: Option<Pattern>,

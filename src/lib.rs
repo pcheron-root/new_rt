@@ -5,9 +5,12 @@ pub const EPSILON: f32 = 0.0001;
 
 // structures
 pub use structures::vector::Vector;
+pub use structures::camera::Camera;
+pub use structures::camera::Direction;
 pub use structures::canvas::Canvas;
 pub use structures::color::Color;
 pub use structures::material::Material;
+pub use structures::light::Light;
 pub use structures::matrix::Matrix;
 pub use structures::ray::Ray;
 pub use structures::point::Point;
@@ -18,8 +21,10 @@ pub use structures::intersection::Intersect;
 pub use structures::intersection::LocalIntersection;
 pub use structures::shapes::shape::Shape;
 pub use structures::shapes::sphere::Sphere;
+pub use structures::world::World;
 
 // parsing
 pub mod parser;
 pub use parser::{get_info_map, NewCanvas};
 
+pub use structures::render;
