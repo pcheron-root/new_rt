@@ -99,3 +99,13 @@ impl MulAssign for Color {
         self.b *= rhs.b;
     }
 }
+
+impl Into<u32> for Color {
+    fn into(self) -> u32 {
+        let r: u32 = (self.r.clamp(0.0, 1.0) * 255.0) as u32;
+        let g = (self.g.clamp(0.0, 1.0) * 255.0) as u32;
+        let b = (self.b.clamp(0.0, 1.0) * 255.0) as u32;
+
+        (r << 16) | (g << 8) | (b << 0)
+    }
+}

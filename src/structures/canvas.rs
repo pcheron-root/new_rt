@@ -74,4 +74,8 @@ impl Canvas {
 
         Ok(())
     }
+
+    pub fn pixels(&self) -> Vec<u32> {
+        self.pixels.iter().map(|c| c.clone().into()).collect()
+    }
 }

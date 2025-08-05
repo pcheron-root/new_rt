@@ -1,12 +1,12 @@
 pub mod utils;
 pub mod structures;
+pub mod enums;
 
 pub const EPSILON: f32 = 0.0001;
 
 // structures
 pub use structures::vector::Vector;
 pub use structures::camera::Camera;
-pub use structures::camera::Direction;
 pub use structures::canvas::Canvas;
 pub use structures::color::Color;
 pub use structures::material::Material;
@@ -27,4 +27,7 @@ pub use structures::world::World;
 pub mod parser;
 pub use parser::{get_info_map, NewCanvas};
 
-pub use structures::render;
+pub use structures::render::Renderer;
+
+pub use enums::directions::Direction;
+pub use enums::keys::Key;

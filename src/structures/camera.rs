@@ -1,6 +1,6 @@
 
 use std::ops::{Add, Sub, Mul};
-use crate::{Point, Vector};
+use crate::{Point, Vector, Direction};
 
 fn lerp<T>(start: T, end: T, t: f32) -> T
 where
@@ -9,13 +9,6 @@ where
     let t = t.clamp(0., 1.);
 
     start * (1. - t) + end * t
-}
-
-pub enum Direction {
-    Forward,
-    Backward,
-    Left,
-    Right,
 }
 
 pub struct Camera {

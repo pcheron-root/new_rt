@@ -3,14 +3,14 @@ use crate::{Object, Point, Ray, Vector};
 
 #[derive(Debug, Clone)]
 pub struct Intersection {
-    pub object: Object,
-    pub t: f32,
+    pub object: Object, // la on veut pas plutot une reference ?
+    pub t: f32, // distance
     pub point: Point,
     pub normal: Vector,
     pub hit_normal: Vector,
     pub over_point: Point,
     pub reflectv: Vector,
-    pub n1: f32,
+    pub n1: f32, // ca c'est le milieu de depart, c'est de la merde, je veux pas le mettre la
 }
 
 impl Intersection {

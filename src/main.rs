@@ -1,6 +1,6 @@
 
 use new_rt::get_info_map;
-use new_rt::Canvas;
+use new_rt::{Canvas, Renderer};
 
 use std::env;
 
@@ -17,6 +17,15 @@ fn main() {
         Ok (info_map) => {
             eprintln!("{:?}", info_map);
             let canvas = Canvas::new(info_map.canvas);
+            match Renderer::new(canvas, info_map.world) {
+                Ok(mut renderer) => {
+                    renderer.update_image();
+                    let _ = renderer.render();
+                }
+                Err(e) => {
+                    eprintln!("Error from renderer creation: {:?}", e);
+                }
+            }
         }
         Err(e) => {
             eprintln!("Error from get_info_map: {}", e);
