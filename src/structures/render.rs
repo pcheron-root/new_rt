@@ -3,7 +3,7 @@
 use minifb::{Key, Window, WindowOptions};
 
 // use crate::{Camera, Canvas, Direction, World};
-use crate::{Camera, Canvas, World, Point, Vector, Color, Matrix, Ray, Direction};
+use crate::{Camera, Canvas, World, Point, Vector, Color, Matrix, Ray, Direction, Intersection};
 
 pub struct Renderer {
     pub window: Window,
@@ -52,9 +52,19 @@ impl Renderer {
     }
 
     pub fn get_pixel(&mut self, ray: &Ray) -> Color {
-        
+        let hit: Option<Intersection> = self.world.intersect(ray, 1.);
+        if hit.is_some() {
+            // let color = get_phong_color(self.world, hit.unwrap());
+            
+            // calculer la lumiere ambiant
+            // calculer la lumiere direct
+            // calculer la lumiere specular
 
-        Color::new(1., 0., 0.)
+            return Color::new(1., 0., 0.);
+
+        }
+        self.sky
+        // Color::new(1., 0., 0.)
     }
 
     pub fn update_image(&mut self) {
