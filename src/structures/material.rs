@@ -1,19 +1,18 @@
-use crate::{Color};//, Pattern};
+use crate::{Color, Pattern};
 use std::default::Default;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, )]
 pub struct Material {
     pub color: Color,
-    // pub pattern: Option<Pattern>,
-
     pub shininess: f32,  // between 10 and 200
     pub ambient: f32,    // between 0 and 1
     pub diffuse: f32,    // between 0 and 1
     pub specular: f32,   // between 0 and 1
     pub reflective: f32, // between 0 and 1
     pub refractive_index: f32,
+    pub pattern: Option<Pattern>,
     pub transparency: f32,
 }
 
@@ -25,7 +24,7 @@ impl Default for Material {
         let diffuse = 0.9;
         let specular = 0.9;
         let reflective = 0.0;
-        // let pattern = None;
+        let pattern = None;
         let refractive_index = 1.0;
         let transparency = 0.;
 
@@ -35,7 +34,7 @@ impl Default for Material {
             color,
             ambient,
             diffuse,
-            // pattern,
+            pattern,
             reflective,
             refractive_index,
             transparency,

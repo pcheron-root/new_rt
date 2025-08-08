@@ -12,7 +12,7 @@ mod tests {
             color: color,
             ambient: 1.,
             diffuse: 1.,
-            // pattern: None,
+            pattern: None,
             reflective: 0.,
             refractive_index: 1.,
             transparency: 0.,

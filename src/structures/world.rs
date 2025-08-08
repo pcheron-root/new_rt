@@ -56,16 +56,16 @@ impl World {
         shadowed: bool,
     ) -> Color {
         let effective_color;
-        // if obj.material.pattern.is_some() {
-        //     effective_color = obj
-        //         .material
-        //         .pattern
-        //         .clone()
-        //         .unwrap()
-        //         .stripe_at_object(obj, point);
-        // } else {
+        if obj.material.pattern.is_some() {
+            effective_color = obj
+                .material
+                .pattern
+                .clone()
+                .unwrap()
+                .stripe_at_object(obj, point);
+        } else {
             effective_color = obj.material.color * light.intensity;
-        // }
+        }
 
         let lightv = (light.position - *point).normalize();
 

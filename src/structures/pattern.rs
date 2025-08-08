@@ -1,6 +1,8 @@
 use crate::{Color, Matrix, Object, Point, Transform, Vector};
 
-#[derive(Debug, Clone, PartialEq)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub enum Axis {
     X,
     Y,
@@ -11,7 +13,7 @@ pub enum Axis {
     XYZ,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Pattern {
     pub a: Color,
     pub b: Color,
