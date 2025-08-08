@@ -36,11 +36,14 @@ impl Renderer {
                     0.1,
                     100.,
                 );
-                
+                let mut new_world = world.clone();
+                for object in &mut new_world.objects {
+                    object.update();
+                }
                 Ok(Self {
                     window,
                     canvas,
-                    world,
+                    world: new_world,
                     camera,
                     sky: Color::new(0., 0., 0.), // a basculer dans le monde ?
                 })
@@ -94,10 +97,13 @@ impl Renderer {
         color
     }
 
-    pub fn get_phong_color(&self, initial_hit: &Intersection) -> Color {
+    pub fn get_phong_color(&self, initial_hit: &Intersection, ) -> Color {
         let mut reflected_color = Color::new(0.0, 0.0, 0.0);
         let mut first_hit = initial_hit.clone();
         let mut factor = 1.0;
+
+        // < 1.
+
         if first_hit.object.material.reflective > 0. {
             for _ in 0..1 {
                 let reflected_ray = Ray::new(first_hit.point, first_hit.reflectv);
@@ -115,7 +121,7 @@ impl Renderer {
                 }
             }
         }
-        //
+        
         let color = self.shade_it(&initial_hit) + reflected_color;
         color
     }
@@ -124,7 +130,8 @@ impl Renderer {
         let hit: Option<Intersection> = self.world.intersect(ray, 1.);
         match hit {
             Some(inter) => {
-
+                // eprintln!("Je tombe sur l'obj {:?} pos: {:?}", inter.object.material.color, inter.object.position);
+                // inter.object.material.color//+ Color::new(0.1, 0.1, 0.1)
                 self.get_phong_color(&inter) + Color::new(0.1, 0.1, 0.1)
             }
             None => {

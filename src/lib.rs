@@ -2,7 +2,7 @@ pub mod utils;
 pub mod structures;
 pub mod enums;
 
-pub const EPSILON: f32 = 0.0001;
+pub const EPSILON: f32 = 0.001;
 
 // structures
 pub use structures::vector::Vector;

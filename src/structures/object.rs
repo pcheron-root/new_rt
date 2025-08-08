@@ -38,7 +38,7 @@ impl Object {
         self
     }
 
-    fn update(&mut self) {
+    pub fn update(&mut self) {
         let vt = Vector::new(self.position.x, self.position.y, self.position.z);
 
         let translation = Matrix::translation(vt);
@@ -62,7 +62,7 @@ impl Object {
             let over_point = world_point + world_normal * EPSILON;
 
             Some(Intersection::new(
-                (*self).clone(),
+                self,
                 local_hit.t,
                 world_point,
                 world_normal,

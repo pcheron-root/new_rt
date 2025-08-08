@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{Object, Light, Ray, Intersection, Point, Vector, Color};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct World {
     pub objects: Vec<Object>,
     pub lights: Vec<Light>,
@@ -29,9 +29,10 @@ impl World {
         let mut closest_intersection = None;
 
         for object in &self.objects {
-            let intersection = object.intersect(&ray, n1);
-
+            let intersection = object.intersect(ray, n1);
+            
             if intersection.is_some() {
+                // eprintln!("Je tombe sur l'obj {:?} pos: {:?}", object.material.color, object.position);
                 if closest_intersection.is_none() {
                     closest_intersection = intersection
                 } else {
