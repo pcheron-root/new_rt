@@ -1,7 +1,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::{Object, Light, Ray, Intersection};
+use crate::{Object, Light, Ray, Intersection, Point, Vector, Color};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct World {
@@ -43,6 +43,50 @@ impl World {
         }
 
         closest_intersection
+    }
+
+    // shadow and light
+    pub fn lighting(
+        obj: &Object,
+        light: &Light,
+        point: &Point,
+        eyev: &Vector,
+        normalv: &Vector,
+        shadowed: bool,
+    ) -> Color {
+        let effective_color;
+        // if obj.material.pattern.is_some() {
+        //     effective_color = obj
+        //         .material
+        //         .pattern
+        //         .clone()
+        //         .unwrap()
+        //         .stripe_at_object(obj, point);
+        // } else {
+            effective_color = obj.material.color * light.intensity;
+        // }
+
+        let lightv = (light.position - *point).normalize();
+
+        let ambient = effective_color * obj.material.ambient;
+        let light_dot_normal = lightv.dot(normalv);
+
+        if light_dot_normal < 0. || shadowed == true {
+            return ambient;
+        }
+
+        let diffuse = effective_color * obj.material.diffuse * light_dot_normal;
+
+        let reflectv = (-lightv).reflect(normalv);
+        let reflect_dot_eye = reflectv.dot(eyev);
+
+        if reflect_dot_eye <= 0. {
+            return ambient + diffuse;
+        } else {
+            let factor = reflect_dot_eye.powf(obj.material.shininess);
+            let specular = light.intensity * obj.material.specular * factor;
+            return ambient + diffuse + specular;
+        }
     }
 
 }

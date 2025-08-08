@@ -3,7 +3,7 @@
 use minifb::{Key, Window, WindowOptions};
 
 // use crate::{Camera, Canvas, Direction, World};
-use crate::{Camera, Canvas, World, Point, Vector, Color, Matrix, Ray, Direction, Intersection};
+use crate::{Camera, Canvas, World, Point, Vector, Color, Matrix, Ray, Direction, Intersection, Light};
 
 pub struct Renderer {
     pub window: Window,
@@ -51,20 +51,87 @@ impl Renderer {
         }
     }
 
+// shadow and light
+
+    pub fn is_shadowed(&self, point: &Point, light: &Light) -> bool {
+        let v = light.position - *point;
+        let distance = v.magnitude();
+        let direction = v.normalize();
+
+        let r = Ray::new(*point, direction);
+
+        let intersection = self.world.intersect(&r, 1.);
+
+        if intersection.is_some() {
+            let h = intersection.unwrap();
+            if h.t < distance {
+                return true;
+            }
+        }
+
+        false
+    }
+
+    pub fn shade_it(&self, comps: &Intersection) -> Color {
+        let mut color = Color::new(0.0, 0.0, 0.0);
+        let light_number = self.world.lights.len();
+
+        for light in &self.world.lights {
+            let shadowed = self.is_shadowed(&comps.over_point, light);
+
+            let temporary_color = World::lighting(
+                &comps.object,
+                light,
+                &comps.over_point,
+                &comps.hit_normal,
+                &comps.normal,
+                shadowed,
+            );
+
+            color += temporary_color * (1.0 / light_number as f32);
+        }
+
+        color
+    }
+
+    pub fn get_phong_color(&self, initial_hit: &Intersection) -> Color {
+        let mut reflected_color = Color::new(0.0, 0.0, 0.0);
+        let mut first_hit = initial_hit.clone();
+        let mut factor = 1.0;
+        if first_hit.object.material.reflective > 0. {
+            for _ in 0..1 {
+                let reflected_ray = Ray::new(first_hit.point, first_hit.reflectv);
+
+                let reflected_hit = self.world.intersect(&reflected_ray, 1.);
+                if reflected_hit.is_some() {
+                    let reflected_inter = reflected_hit.unwrap();
+                    reflected_color += self.shade_it(&reflected_inter)
+                        * first_hit.object.material.reflective
+                        * factor;
+                    factor = factor * 0.20;
+                    first_hit = reflected_inter;
+                } else {
+                    break;
+                }
+            }
+        }
+        //
+        let color = self.shade_it(&initial_hit) + reflected_color;
+        color
+    }
+
     pub fn get_pixel(&mut self, ray: &Ray) -> Color {
         let hit: Option<Intersection> = self.world.intersect(ray, 1.);
-        if hit.is_some() {
-            // let color = get_phong_color(self.world, hit.unwrap());
-            
-            // calculer la lumiere ambiant
-            // calculer la lumiere direct
-            // calculer la lumiere specular
+        match hit {
+            Some(inter) => {
 
-            return Color::new(1., 0., 0.);
+                self.get_phong_color(&inter) + Color::new(0.1, 0.1, 0.1)
+            }
+            None => {
 
+                self.sky
+            }
         }
-        self.sky
-        // Color::new(1., 0., 0.)
     }
 
     pub fn update_image(&mut self) {

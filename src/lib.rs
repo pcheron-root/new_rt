@@ -22,6 +22,7 @@ pub use structures::intersection::LocalIntersection;
 pub use structures::shapes::shape::Shape;
 pub use structures::shapes::sphere::Sphere;
 pub use structures::world::World;
+pub use structures::pattern::Pattern;
 
 // parsing
 pub mod parser;
