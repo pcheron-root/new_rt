@@ -1,6 +1,7 @@
 use crate::EPSILON;
 use crate::{Intersection, Material, Matrix, Point, Ray, Shape, Vector};
 
+use image::DynamicImage;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -16,8 +17,9 @@ pub struct Object {
     pub world_to_local: Matrix,
     pub local_to_world: Matrix,
 
-    // pub tex_img_name: Option<String>,
-    // pub tex: Option
+    pub tex_img_name: Option<String>,
+    #[serde(skip)]
+    pub tex: Option<DynamicImage>,
 }
 
 impl Object {
@@ -32,6 +34,8 @@ impl Object {
             scale: Vector::new(1., 1., 1.),
             world_to_local: Matrix::identity(),
             local_to_world: Matrix::identity(),
+            tex_img_name: None,
+            tex: None,
         }
     }
 
