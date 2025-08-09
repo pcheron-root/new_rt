@@ -1,4 +1,3 @@
-// use std::convert::Into;
 use std::ops::{Add, AddAssign, Mul, MulAssign, Sub, SubAssign};
 
 use serde::{Deserialize, Serialize};
@@ -17,6 +16,14 @@ impl Color {
         Self { r, g, b }
     }
 
+    pub fn from_rgba(pixel: image::Rgba<u8>) -> Self {
+        Color {
+            r: pixel[0] as f32 / 255.0,
+            g: pixel[1] as f32 / 255.0,
+            b: pixel[2] as f32 / 255.0,
+        }
+    }
+
     pub fn red(&self) -> f32 {
         self.r
     }
@@ -28,6 +35,7 @@ impl Color {
     pub fn blue(&self) -> f32 {
         self.b
     }
+
 }
 
 impl Add for Color {

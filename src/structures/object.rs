@@ -15,6 +15,9 @@ pub struct Object {
 
     pub world_to_local: Matrix,
     pub local_to_world: Matrix,
+
+    // pub tex_img_name: Option<String>,
+    // pub tex: Option
 }
 
 impl Object {
@@ -75,6 +78,7 @@ impl Object {
             None
         }
     }
+
 }
 
 // this trait will be associate to Patterns, so maybe he deserve it own file ?

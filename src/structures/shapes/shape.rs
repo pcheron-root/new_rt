@@ -1,5 +1,5 @@
 
-use crate::{Sphere, Ray, LocalIntersection, Intersect, Cube, Disk, Torus, Triangle};
+use crate::{Sphere, Ray, LocalIntersection, Intersect, Cube, Disk, Torus, Triangle, Tube, Plane, Cone, Cylinder};
 
 use serde::{Deserialize, Serialize};
 
@@ -10,6 +10,10 @@ pub enum Shape {
     Disk(Disk),
     Torus(Torus),
     Triangle(Triangle),
+    Tube(Tube),
+    Plane(Plane),
+    Cone(Cone),
+    Cylinder(Cylinder),
 }
 
 impl Shape {
@@ -20,6 +24,10 @@ impl Shape {
             Shape::Disk(s) => s.intersect(ray),
             Shape::Torus(s) => s.intersect(ray),
             Shape::Triangle(s) => s.intersect(ray),
+            Shape::Tube(s) => s.intersect(ray),
+            Shape::Plane(s) => s.intersect(ray),
+            Shape::Cone(s) => s.intersect(ray),
+            Shape::Cylinder(s) => s.intersect(ray),
         }
     }
 }

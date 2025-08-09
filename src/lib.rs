@@ -25,6 +25,10 @@ pub use structures::shapes::cube::Cube;
 pub use structures::shapes::disk::Disk;
 pub use structures::shapes::torus::Torus;
 pub use structures::shapes::triangle::Triangle;
+pub use structures::shapes::tube::Tube;
+pub use structures::shapes::plane::Plane;
+pub use structures::shapes::cone::Cone;
+pub use structures::shapes::cylinder::Cylinder;
 pub use structures::world::World;
 pub use structures::pattern::{Pattern, Axis};
 
