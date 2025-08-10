@@ -1,5 +1,7 @@
-use crate::{Color, Pattern};
+use crate::{Color, Pattern, Texture};
 use std::default::Default;
+
+// use image::DynamicImage;
 
 use serde::{Deserialize, Serialize};
 
@@ -14,6 +16,8 @@ pub struct Material {
     pub refractive_index: f32,
     pub pattern: Option<Pattern>,
     pub transparency: f32,
+    #[serde(skip)]
+    pub tex: Option<Texture>,
 }
 
 impl Default for Material {
@@ -38,6 +42,7 @@ impl Default for Material {
             reflective,
             refractive_index,
             transparency,
+            tex: None,
         }
     }
 }

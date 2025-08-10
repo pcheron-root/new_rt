@@ -30,6 +30,7 @@ pub use structures::shapes::plane::Plane;
 pub use structures::shapes::cone::Cone;
 pub use structures::shapes::cylinder::Cylinder;
 pub use structures::world::World;
+pub use structures::texture::Texture;
 pub use structures::pattern::{Pattern, Axis};
 
 // parsing

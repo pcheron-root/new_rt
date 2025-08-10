@@ -55,17 +55,15 @@ impl World {
         normalv: &Vector,
         shadowed: bool,
     ) -> Color {
-        let effective_color;
-        if obj.material.pattern.is_some() {
-            effective_color = obj
-                .material
-                .pattern
-                .clone()
-                .unwrap()
-                .stripe_at_object(obj, point);
-        } else {
-            effective_color = obj.material.color * light.intensity;
+        let effective_color=if let Some(pattern) = &obj.material.pattern {
+             pattern.stripe_at_object(obj, point)
+        } 
+        else if let Some(tex) = &obj.material.tex {
+            tex.stripe_at_object(obj, point)
         }
+        else {
+             obj.material.color * light.intensity
+        };
 
         let lightv = (light.position - *point).normalize();
 

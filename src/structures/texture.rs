@@ -1,0 +1,121 @@
+
+use crate::{Color, Point, Object};
+
+use image::{DynamicImage, Rgba, GenericImageView};
+
+#[derive(Debug, Clone)]
+pub struct Texture {
+    pub image: DynamicImage,
+    pub width: u32,
+    pub height: u32,
+}
+
+impl Texture {
+    pub fn new(image: DynamicImage) -> Self {
+        let width = image.width();
+        let height = image.height();
+        Self {
+            image,
+            width,
+            height,
+        }
+    }
+
+    pub fn stripe_at_object(&self, obj: &Object, world_point: &Point) -> Color {
+        let obj_point = obj.world_to_local.clone() * *world_point;
+        // let pattern_point = self.world_to_local.clone() * obj_point;
+
+        let coord = TextureMapping::spherical_uv(&obj_point);
+        self.sample_uv(coord.0, coord.1)
+    }
+
+    pub fn sample_uv(&self, u: f32, v: f32) -> Color {
+        let u = u.clamp(0.0, 1.0);
+        let v = v.clamp(0.0, 1.0);
+
+        let x = ((u * self.width as f32) as u32).min(self.width - 1);
+        let y = (((1.0 - v) * self.height as f32) as u32).min(self.height - 1);
+
+        let pixel = self.image.get_pixel(x, y);
+        
+        Color {
+            r: pixel[0] as f32 / 255.0,
+            g: pixel[1] as f32 / 255.0,
+            b: pixel[2] as f32 / 255.0,
+        }
+    }
+
+    // unused
+    // Échantillonner avec filtrage bilinéaire pour une meilleure qualité
+    pub fn sample_uv_filtered(&self, u: f32, v: f32) -> Color {
+        let u = u.clamp(0.0, 1.0);
+        let v = v.clamp(0.0, 1.0);
+
+        // Coordonnées continues
+        let x_float = u * (self.width - 1) as f32;
+        let y_float = (1.0 - v) * (self.height - 1) as f32;
+
+        // Coordonnées des 4 pixels voisins
+        let x1 = x_float.floor() as u32;
+        let y1 = y_float.floor() as u32;
+        let x2 = (x1 + 1).min(self.width - 1);
+        let y2 = (y1 + 1).min(self.height - 1);
+
+        // Facteurs d'interpolation
+        let fx = x_float - x1 as f32;
+        let fy = y_float - y1 as f32;
+
+        // Échantillonner les 4 pixels
+        let c00 = self.pixel_to_color(self.image.get_pixel(x1, y1));
+        let c10 = self.pixel_to_color(self.image.get_pixel(x2, y1));
+        let c01 = self.pixel_to_color(self.image.get_pixel(x1, y2));
+        let c11 = self.pixel_to_color(self.image.get_pixel(x2, y2));
+
+        // Interpolation bilinéaire
+        let c0 = c00 * (1.0 - fx) + c10 * fx;
+        let c1 = c01 * (1.0 - fx) + c11 * fx;
+        c0 * (1.0 - fy) + c1 * fy
+    }
+
+    fn pixel_to_color(&self, pixel: Rgba<u8>) -> Color {
+        Color {
+            r: pixel[0] as f32 / 255.0,
+            g: pixel[1] as f32 / 255.0,
+            b: pixel[2] as f32 / 255.0,
+        }
+    }
+
+}
+
+pub struct TextureMapping;
+
+impl TextureMapping {
+
+    // sphere
+    pub fn spherical_uv(point: &Point) -> (f32, f32) {
+        // Convert to spherical coordinates
+        let theta = point.z.atan2(point.x);
+        let radius = (point.x * point.x + point.y * point.y + point.z * point.z).sqrt();
+        let phi = (point.y / radius).acos();
+
+        // Convert to UV coordinates
+        let u = (theta + std::f32::consts::PI) / (2.0 * std::f32::consts::PI);
+        let v = phi / std::f32::consts::PI;
+
+        (u, v)
+    }
+
+    // plane
+    pub fn planar_uv(point: &Point) -> (f32, f32) {
+        let u = (point.x - point.x.floor()).abs();
+        let v = (point.z - point.z.floor()).abs();
+        (u, v)
+    }
+
+    pub fn cylindrical_uv(point: &Point) -> (f32, f32) {
+        let theta = point.z.atan2(point.x);
+        let u = (theta + std::f32::consts::PI) / (2.0 * std::f32::consts::PI);
+        let v = (point.y - point.y.floor()).abs();
+        (u, v)
+    }
+}

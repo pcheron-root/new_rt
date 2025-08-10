@@ -39,6 +39,7 @@ impl Renderer {
                 let mut new_world = world.clone();
                 for object in &mut new_world.objects {
                     object.update();
+                    object.get_texture();
                 }
                 Ok(Self {
                     window,

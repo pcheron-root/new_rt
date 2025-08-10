@@ -1,7 +1,7 @@
 use crate::EPSILON;
-use crate::{Intersection, Material, Matrix, Point, Ray, Shape, Vector};
+use crate::{Intersection, Material, Matrix, Point, Ray, Shape, Vector, Texture};
 
-use image::DynamicImage;
+use image::open;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -18,8 +18,7 @@ pub struct Object {
     pub local_to_world: Matrix,
 
     pub tex_img_name: Option<String>,
-    #[serde(skip)]
-    pub tex: Option<DynamicImage>,
+
 }
 
 impl Object {
@@ -35,7 +34,6 @@ impl Object {
             world_to_local: Matrix::identity(),
             local_to_world: Matrix::identity(),
             tex_img_name: None,
-            tex: None,
         }
     }
 
@@ -54,6 +52,21 @@ impl Object {
 
         self.local_to_world = translation * rotation * scaling;
         self.world_to_local = self.local_to_world.inverse().unwrap();
+    }
+
+    pub fn get_texture(&mut self) {
+        if self.tex_img_name.is_some() {
+            eprintln!("je trouve un nom de texture");
+            match open(&self.tex_img_name.clone().unwrap()) {
+                Ok(ok) => {
+                    eprintln!("je trouve une image");
+                    self.material.tex = Some(Texture::new(ok));
+                }
+                Err(e) => {
+                    eprintln!("Erreur lors de l'ouverture: {}", e);
+                }
+            }
+        }
     }
 
     pub fn intersect(&self, ray: &Ray, n1: f32) -> Option<Intersection> {

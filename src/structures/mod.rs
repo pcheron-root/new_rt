@@ -13,3 +13,4 @@ pub mod render;
 pub mod vector;
 pub mod world;
 pub mod pattern;
+pub mod texture;
