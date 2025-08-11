@@ -57,9 +57,13 @@ impl World {
     ) -> Color {
         let effective_color=if let Some(pattern) = &obj.material.pattern {
              pattern.stripe_at_object(obj, point)
-        } 
-        else if let Some(tex) = &obj.material.tex {
-            tex.stripe_at_object(obj, point)
+        }
+        else if let Some(texs) = &obj.material.tex && !texs.is_empty() {
+            let mut color = texs[0].stripe_at_object(obj, point);
+            for i in 1..(texs.len()) {
+                color += texs[i].stripe_at_object(obj, point) * 0.2;
+            }
+            color
         }
         else {
              obj.material.color * light.intensity

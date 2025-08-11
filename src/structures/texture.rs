@@ -33,8 +33,8 @@ impl Texture {
         let u = u.clamp(0.0, 1.0);
         let v = v.clamp(0.0, 1.0);
 
-        let x = ((u * self.width as f32) as u32).min(self.width - 1);
-        let y = (((1.0 - v) * self.height as f32) as u32).min(self.height - 1);
+        let x = (((1. - u) * self.width as f32) as u32).min(self.width - 1);
+        let y = ((v * self.height as f32) as u32).min(self.height - 1);
 
         let pixel = self.image.get_pixel(x, y);
         
@@ -116,6 +116,33 @@ impl TextureMapping {
         let theta = point.z.atan2(point.x);
         let u = (theta + std::f32::consts::PI) / (2.0 * std::f32::consts::PI);
         let v = (point.y - point.y.floor()).abs();
+        (u, v)
+    }
+
+    // thorus
+    pub fn toroidal_uv(point: &Point, major_radius: f32, minor_radius: f32) -> (f32, f32) {
+        // Calculate distance from Y-axis (distance to torus center axis)
+        let distance_from_axis = (point.x * point.x + point.z * point.z).sqrt();
+        
+        // Theta: angle around the major circumference (around Y-axis)
+        let theta = point.z.atan2(point.x);
+        
+        // Find the closest point on the major circumference
+        let major_circle_x = major_radius * (theta.cos());
+        let major_circle_z = major_radius * (theta.sin());
+        
+        // Vector from major circle to the point
+        let to_point_x = point.x - major_circle_x;
+        let to_point_z = point.z - major_circle_z;
+        let to_point_y = point.y;
+        
+        // Phi: angle around the minor circumference (around the tube)
+        let phi = to_point_y.atan2((to_point_x * to_point_x + to_point_z * to_point_z).sqrt());
+        
+        // Convert to UV coordinates [0, 1]
+        let u = (theta + std::f32::consts::PI) / (2.0 * std::f32::consts::PI);
+        let v = (phi + std::f32::consts::PI) / (2.0 * std::f32::consts::PI);
+        
         (u, v)
     }
 }

@@ -17,7 +17,7 @@ pub struct Object {
     pub world_to_local: Matrix,
     pub local_to_world: Matrix,
 
-    pub tex_img_name: Option<String>,
+    pub tex_img_name: Option<Vec<String>>,
 
 }
 
@@ -56,16 +56,21 @@ impl Object {
 
     pub fn get_texture(&mut self) {
         if self.tex_img_name.is_some() {
-            eprintln!("je trouve un nom de texture");
-            match open(&self.tex_img_name.clone().unwrap()) {
-                Ok(ok) => {
-                    eprintln!("je trouve une image");
-                    self.material.tex = Some(Texture::new(ok));
+            eprintln!("I have found a vector of texture names");
+            let mut textures = Vec::new();
+            for img in self.tex_img_name.clone().unwrap() {
+                match open(img.clone()) {
+                    Ok(ok) => {
+                        eprintln!("I opened a texture {}", img);
+                        textures.push(Texture::new(ok));
+                    }
+                    Err(e) => {
+                        eprintln!("Error when opening a file ({}): {}", img, e);
+                    }
                 }
-                Err(e) => {
-                    eprintln!("Erreur lors de l'ouverture: {}", e);
-                }
+
             }
+            self.material.tex = Some(textures);
         }
     }
 

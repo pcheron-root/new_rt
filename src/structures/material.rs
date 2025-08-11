@@ -17,7 +17,7 @@ pub struct Material {
     pub pattern: Option<Pattern>,
     pub transparency: f32,
     #[serde(skip)]
-    pub tex: Option<Texture>,
+    pub tex: Option<Vec<Texture>>,
 }
 
 impl Default for Material {
